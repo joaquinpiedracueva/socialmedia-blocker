@@ -1,1 +1,3 @@
-# chrome-extension-study
+# Chrome Extension Test
+
+## WIP
