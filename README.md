@@ -1,3 +1,3 @@
 # Chrome Extension Test
 
-## WIP
+![Extension Icon](image.png)
