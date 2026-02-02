@@ -9,7 +9,6 @@ A Chrome extension to help you stay focused by blocking distracting sites.
 - **YouTube** - Hides recommendations, sidebar, and distracting elements
 - **Reddit** - Hides sidebars
 - **Instagram** - Fully blocked
-- **Netflix** - Fully blocked
 
 ## Installation
 

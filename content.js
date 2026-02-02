@@ -1,7 +1,17 @@
+
+
 switch (window.location.hostname) {
     case "www.youtube.com":
+      const youtubeRecommendations = ".style-scope ytd-rich-grid-renderer";
+      const youtubeTags = "#chips-content";
+      const youtubeVoiceSearch = "#voice-search-button";
+      const youtubeSidebarItems = " #items";
+      const youtubeNotifications = "#button";
+      const youtubeGuide = "#guide-inner-content"
       const youtubeStyle = document.createElement("style");
-      youtubeStyle.textContent = "#contents, #guide-inner-content, #alert-banner, #button, #chips-content, #voice-search-button, #items { display: none !important; }";
+
+      youtubeStyle.textContent = `${youtubeRecommendations}, ${youtubeTags}, ${youtubeVoiceSearch}, ${youtubeSidebarItems}, ${youtubeNotifications}, ${youtubeGuide} { display: none !important; }`;
+
       document.head.appendChild(youtubeStyle);
       break;
     case "www.reddit.com":
@@ -10,9 +20,6 @@ switch (window.location.hostname) {
       document.head.appendChild(redditStyle);
       break;
     case "www.instagram.com":
-      document.body.innerText = "This site is blocked";
-      break;
-    case "www.netflix.com":
       document.body.innerText = "This site is blocked";
       break;
   }
