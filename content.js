@@ -1,33 +1,54 @@
-switch (window.location.hostname) {
-    case "www.youtube.com":
-      const youtubeNavTags = "#chips-content";
-      const youtubeNavVoiceSearch = "#voice-search-button";
-      const youtubeNavSidebarItems = " #items";
-      const youtubeNavNotificationsButton = "#button";
-      const youtubeNavCreateButton = "ytd-masthead #end #buttons ytd-button-renderer:first-of-type"
-      const youtubeHomeRecommendationsSection = ".style-scope ytd-rich-grid-renderer";
-      const youtubeHomeGuideSection = "#guide-inner-content";
-      const youtubeVideoOptionsMenu = "#menu";
-      const youtubeVideoNotificationsButton = "#notification-preference-button";
-      const youtubeVideoSponsorButton = "#sponsor-button";
+let enabled = true;
 
-      const youtubeStyle = document.createElement("style");
+function applyBlock() {
+  removeBlock();
 
-      youtubeStyle.textContent = `${youtubeNavTags}, ${youtubeNavVoiceSearch}, ${youtubeNavSidebarItems}, ${youtubeNavNotificationsButton}, ${youtubeNavCreateButton}, ${youtubeHomeRecommendationsSection}, ${youtubeHomeGuideSection}, ${youtubeVideoOptionsMenu}, ${youtubeVideoNotificationsButton}, ${youtubeVideoSponsorButton} { display: none !important; }`;
+  const youtubeNavTags = "#chips-content";
+  const youtubeNavVoiceSearch = "#voice-search-button";
+  const youtubeNavSidebarItems = " #items";
+  const youtubeNavNotificationsButton = "#button";
+  const youtubeNavCreateButton = "ytd-masthead #end #buttons ytd-button-renderer:first-of-type"
+  const youtubeHomeRecommendationsSection = ".style-scope ytd-rich-grid-renderer";
+  const youtubeHomeGuideSection = "#guide-inner-content";
+  const youtubeVideoOptionsMenu = "#menu";
+  const youtubeVideoNotificationsButton = "#notification-preference-button";
+  const youtubeVideoSponsorButton = "#sponsor-button";
 
-      document.head.appendChild(youtubeStyle);
-      break;
-    case "www.reddit.com":
-      const redditRightSidebar = "#right-sidebar-container";
-      const redditLeftSidebar = "#left-sidebar";
+  const youtubeStyle = document.createElement("style");
+  youtubeStyle.id = "site-blocker-style";
 
-      const redditStyle = document.createElement("style");
+  const isChannelPage = window.location.pathname.includes("@");
 
-      redditStyle.textContent = `${redditRightSidebar}, ${redditLeftSidebar} { display: none !important; }`;
+  const selectors = [youtubeNavTags, youtubeNavVoiceSearch, youtubeNavSidebarItems, youtubeNavNotificationsButton, youtubeNavCreateButton, youtubeHomeGuideSection, youtubeVideoOptionsMenu, youtubeVideoNotificationsButton, youtubeVideoSponsorButton];
+  if (!isChannelPage) selectors.push(youtubeHomeRecommendationsSection);
 
-      document.head.appendChild(redditStyle);
-      break;
-    case "www.instagram.com":
-      document.body.innerText = "This site is blocked";
-      break;
+  youtubeStyle.textContent = selectors.join(", ") + " { display: none !important; }";
+
+  document.head.appendChild(youtubeStyle);
+}
+
+function removeBlock() {
+  const style = document.getElementById("site-blocker-style");
+  if (style) style.remove();
+}
+
+// Detect YouTube SPA navigation
+let lastUrl = location.href;
+new MutationObserver(() => {
+  if (location.href !== lastUrl) {
+    lastUrl = location.href;
+    if (enabled) applyBlock();
   }
+}).observe(document, { subtree: true, childList: true });
+
+chrome.storage.local.get("enabled", (data) => {
+  enabled = data.enabled !== false;
+  if (enabled) applyBlock();
+});
+
+chrome.storage.onChanged.addListener((changes) => {
+  if (changes.enabled) {
+    enabled = changes.enabled.newValue !== false;
+    enabled ? applyBlock() : removeBlock();
+  }
+});

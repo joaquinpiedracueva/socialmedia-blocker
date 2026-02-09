@@ -1,17 +1,16 @@
 {
-  "name": "Site Blocker",
-  "description": "A Chrome extension to help you stay focused by blocking distracting sites.",
+  "name": "Test",
+  "description": "",
   "version": "1.0",
   "manifest_version": 3,
   "action": {
     "default_popup": "popup/popup.html",
     "default_icon": "image.png"
   },
+  "permissions": ["storage"],
   "content_scripts":[{
     "matches": [
-      "*://*.youtube.com/*",
-      "*://*.reddit.com/*",
-      "*://*.instagram.com/*"
+      "*://*.youtube.com/*"
     ],
     "js": ["content.js"]
   }]

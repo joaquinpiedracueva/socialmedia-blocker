@@ -1,5 +1,54 @@
+:root {
+  --bg: #282828;
+  --toggle-w: 40px;
+  --toggle-h: 22px;
+  --knob-size: 18px;
+  --knob-offset: 2px;
+  --color-off: #808080;
+  --color-on: #FF0000;
+  --color-knob: #FFFFFF;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+}
+
 body {
-  background-color: #333333;
-  color: #FFFFFF;
-  width: max-content;
+  width: 200px;
+  height: 200px;
+  background: var(--bg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Toggle */
+#toggle {
+  width: var(--toggle-w);
+  height: var(--toggle-h);
+  appearance: none;
+  background: var(--color-off);
+  border-radius: calc(var(--toggle-h) / 2);
+  cursor: pointer;
+  transition: .2s;
+}
+
+#toggle:checked {
+  background: var(--color-on);
+}
+
+#toggle::before {
+  content: "";
+  display: block;
+  width: var(--knob-size);
+  height: var(--knob-size);
+  margin: var(--knob-offset);
+  background: var(--color-knob);
+  border-radius: 50%;
+  transition: .2s;
+}
+
+#toggle:checked::before {
+  transform: translateX(calc(var(--toggle-w) - var(--knob-size) - var(--knob-offset) * 2));
 }
