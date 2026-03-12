@@ -1,5 +1,5 @@
 {
-  "name": "Test",
+  "name": "chrome-extension-youtube",
   "description": "",
   "version": "1.0",
   "manifest_version": 3,
@@ -8,10 +8,10 @@
     "default_icon": "image.png"
   },
   "permissions": ["storage"],
-  "content_scripts":[{
-    "matches": [
-      "*://*.youtube.com/*"
-    ],
-    "js": ["content.js"]
-  }]
+  "content_scripts": [
+    {
+      "matches": ["*://*.youtube.com/*"],
+      "js": ["content.js"]
+    }
+  ]
 }

@@ -1,14 +1,22 @@
-# CLAUDE.md
-
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+<p align="center">
+  <img src="image.png" alt="YouTube Distraction Blocker" />
+</p>
 
 ## Project Overview
 
 Chrome Manifest V3 extension that hides distracting YouTube UI elements. No build step, no dependencies, no tests — plain HTML/CSS/JS loaded directly into Chrome.
 
-## Development
+## Installation
 
-Load in Chrome: `chrome://extensions` → Enable Developer mode → Load unpacked → select repo root. After code changes, click the reload button on the extension card.
+1. Clone the repository
+   ```bash
+   git clone https://github.com/joaquinpiedracueva/chrome-extension-youtube.git
+   ```
+2. Open Chrome and go to `chrome://extensions`
+3. Enable **Developer mode** (toggle in the top-right corner)
+4. Click **Load unpacked**
+5. Select the cloned `chrome-extension-youtube` folder
+6. The extension is now active — visit YouTube and enjoy a distraction-free experience
 
 ## Architecture
 
