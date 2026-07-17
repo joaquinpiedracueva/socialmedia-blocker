@@ -34,7 +34,11 @@ function applyBlock() {
   const youtubeStyle = document.createElement("style");
   youtubeStyle.id = "site-blocker-style";
 
-  const selectors = [youtubeNavTags, youtubeNavVoiceSearch, youtubeNavSidebarItems, youtubeNavNotificationsButton, youtubeNavCreateButton, youtubeHomeGuideSection, youtubeVideoOptionsMenu, youtubeVideoNotificationsButton, youtubeVideoSponsorButton, ...shortsSelectors];
+  // Instagram Reels entry in the left sidebar. Exact href match so feed posts
+  // that link to /reels/<id> are left alone.
+  const instagramReelsSidebar = 'a[href="/reels/"]';
+
+  const selectors = [youtubeNavTags, youtubeNavVoiceSearch, youtubeNavSidebarItems, youtubeNavNotificationsButton, youtubeNavCreateButton, youtubeHomeGuideSection, youtubeVideoOptionsMenu, youtubeVideoNotificationsButton, youtubeVideoSponsorButton, instagramReelsSidebar, ...shortsSelectors];
 
   youtubeStyle.textContent = selectors.join(", ") + " { display: none !important; }";
 

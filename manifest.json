@@ -10,7 +10,7 @@
   "permissions": ["storage"],
   "content_scripts": [
     {
-      "matches": ["*://*.youtube.com/*"],
+      "matches": ["*://*.youtube.com/*", "*://*.instagram.com/*"],
       "js": ["content.js"]
     }
   ]
