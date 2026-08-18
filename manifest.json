@@ -1,5 +1,5 @@
 {
-  "name": "chrome-extension-youtube",
+  "name": "socialmedia-blocker",
   "description": "",
   "version": "1.0",
   "manifest_version": 3,
@@ -10,8 +10,21 @@
   "permissions": ["storage"],
   "content_scripts": [
     {
-      "matches": ["*://*.youtube.com/*", "*://*.instagram.com/*"],
+      "matches": ["*://*.youtube.com/*"],
       "js": ["content.js"]
+    },
+    {
+      "matches": [
+        "*://*.instagram.com/*",
+        "*://*.x.com/*",
+        "*://*.twitter.com/*",
+        "*://*.twitch.tv/*",
+        "*://*.kick.com/*",
+        "*://*.tiktok.com/*",
+        "*://*.facebook.com/*"
+      ],
+      "js": ["block.js"],
+      "run_at": "document_start"
     }
   ]
 }

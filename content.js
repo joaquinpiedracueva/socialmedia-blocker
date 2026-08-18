@@ -30,15 +30,14 @@ function applyBlock() {
   const youtubeVideoOptionsMenu = "#menu";
   const youtubeVideoNotificationsButton = "#notification-preference-button";
   const youtubeVideoSponsorButton = "#sponsor-button";
+  // Suggested-videos feed on the homepage. Scoped to the home page-subtype so
+  // grids on subscriptions, channel pages, etc. stay visible.
+  const youtubeHomeSuggestions = "ytd-browse[page-subtype='home'] ytd-rich-grid-renderer";
 
   const youtubeStyle = document.createElement("style");
   youtubeStyle.id = "site-blocker-style";
 
-  // Instagram Reels entry in the left sidebar. Exact href match so feed posts
-  // that link to /reels/<id> are left alone.
-  const instagramReelsSidebar = 'a[href="/reels/"]';
-
-  const selectors = [youtubeNavTags, youtubeNavVoiceSearch, youtubeNavSidebarItems, youtubeNavNotificationsButton, youtubeNavCreateButton, youtubeHomeGuideSection, youtubeVideoOptionsMenu, youtubeVideoNotificationsButton, youtubeVideoSponsorButton, instagramReelsSidebar, ...shortsSelectors];
+  const selectors = [youtubeNavTags, youtubeNavVoiceSearch, youtubeNavSidebarItems, youtubeNavNotificationsButton, youtubeNavCreateButton, youtubeHomeGuideSection, youtubeHomeSuggestions, youtubeVideoOptionsMenu, youtubeVideoNotificationsButton, youtubeVideoSponsorButton, ...shortsSelectors];
 
   youtubeStyle.textContent = selectors.join(", ") + " { display: none !important; }";
 
