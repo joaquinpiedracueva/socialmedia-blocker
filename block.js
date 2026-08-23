@@ -1,7 +1,7 @@
 // Fully blocks the sites listed in manifest.json (Instagram, X/Twitter,
-// Twitch, Kick, TikTok, Facebook). Runs at document_start so the page is
-// stopped before it renders. Styles are set via the CSSOM so strict site
-// CSPs can't strip them.
+// Twitch, Kick, TikTok, Facebook, Netflix, HBO Max, Disney+, Prime Video).
+// Runs at document_start so the page is stopped before it renders. Styles
+// are set via the CSSOM so strict site CSPs can't strip them.
 function showBlockedPage() {
   window.stop();
   document.documentElement.innerHTML = "<head><title>Blocked</title></head><body></body>";

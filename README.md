@@ -17,11 +17,11 @@
 
 ### Fully blocked sites
 
-Instagram, X/Twitter, Twitch, Kick, TikTok, and Facebook never load — the page is stopped before it renders and replaced with a "blocked" screen.
+Instagram, X/Twitter, Twitch, Kick, TikTok, Facebook, Netflix, HBO Max, Disney+, and Prime Video never load — the page is stopped before it renders and replaced with a "blocked" screen.
 
-### Toggle
+### Toggle with a one-hour daily budget
 
-A popup toggle turns everything on or off at once. State persists across sessions; disabling on a blocked site reloads the real page.
+A popup toggle turns everything on or off at once. The blocker can be off for a total of **one hour per day**: turning it off runs the timer down (a countdown shows in the popup), turning it back on pauses it, and the leftover time is kept for later that day. When the hour is used up, blocking turns back on automatically and the toggle is locked; the budget resets the next day. State persists across sessions; disabling on a blocked site reloads the real page.
 
 ## Installation
 
@@ -37,10 +37,11 @@ A popup toggle turns everything on or off at once. State persists across session
 
 ## Architecture
 
-- **manifest.json** — Manifest V3 config. Injects `content.js` on `*.youtube.com` and `block.js` (at `document_start`) on fully blocked sites. Uses `storage` permission for the enable/disable toggle state.
+- **manifest.json** — Manifest V3 config. Injects `content.js` on `*.youtube.com` and `block.js` (at `document_start`) on fully blocked sites. Uses `storage` permission for the enable/disable toggle state and `alarms` for the off-timer.
+- **background.js** — Service worker that owns the daily off-budget. When `enabled` flips to `false`, it stores `offUntil` (now + remaining budget) and sets a `chrome.alarms` alarm; toggling back on banks the unused time in `remainingMs`. When the alarm fires it re-enables blocking and zeroes the budget, after which any attempt to disable is reverted. `dayKey` (a local date string) marks which day the budget belongs to — a new day resets it to the full hour. Pending timers are recovered on browser startup in case the alarm fire time passed while the browser was closed.
 - **content.js** — Injected into YouTube pages. `applyBlock()` injects a `<style>` tag (id `site-blocker-style`) that hides distracting elements via CSS selectors. A `MutationObserver` detects YouTube's SPA navigation and re-applies blocking with correct selectors for the new URL. Listens to `chrome.storage.onChanged` for real-time toggle updates.
-- **block.js** — Injected into Instagram, X/Twitter, Twitch, Kick, TikTok, and Facebook. Stops the page load at `document_start` and replaces it with a "blocked" screen. Respects the same `enabled` toggle; disabling reloads the real site.
-- **popup/** — Browser action popup with a single toggle switch. `popup.js` reads/writes `enabled` key in `chrome.storage.local`. `popup.css` uses CSS custom properties in `:root` for theming.
+- **block.js** — Injected into the fully blocked sites. Stops the page load at `document_start` and replaces it with a "blocked" screen. Respects the same `enabled` toggle; disabling reloads the real site.
+- **popup/** — Browser action popup with a toggle switch and a status line. `popup.js` reads/writes the `enabled` key in `chrome.storage.local`, shows a live countdown while the blocker is off, shows the banked time left while it's on, and disables the toggle once today's budget is spent. `popup.css` uses CSS custom properties in `:root` for theming.
 
 ## Key Patterns
 

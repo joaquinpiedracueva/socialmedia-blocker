@@ -19,8 +19,23 @@ body {
   height: 200px;
   background: var(--bg);
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap: 12px;
+}
+
+#status {
+  color: #aaa;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 12px;
+  text-align: center;
+  min-height: 14px;
+}
+
+#toggle:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
 }
 
 /* Toggle */

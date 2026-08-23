@@ -7,7 +7,10 @@
     "default_popup": "popup/popup.html",
     "default_icon": "image.png"
   },
-  "permissions": ["storage"],
+  "permissions": ["storage", "alarms"],
+  "background": {
+    "service_worker": "background.js"
+  },
   "content_scripts": [
     {
       "matches": ["*://*.youtube.com/*"],
@@ -21,7 +24,11 @@
         "*://*.twitch.tv/*",
         "*://*.kick.com/*",
         "*://*.tiktok.com/*",
-        "*://*.facebook.com/*"
+        "*://*.facebook.com/*",
+        "*://*.netflix.com/*",
+        "*://*.hbomax.com/*",
+        "*://*.disneyplus.com/*",
+        "*://*.primevideo.com/*"
       ],
       "js": ["block.js"],
       "run_at": "document_start"
