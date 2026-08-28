@@ -1,7 +1,7 @@
 const toggle = document.getElementById("toggle");
 const status = document.getElementById("status");
 
-const DAILY_BUDGET_MS = 60 * 60 * 1000;
+const DAILY_BUDGET_MS = 2 * 60 * 60 * 1000;
 
 let countdownInterval = null;
 
@@ -11,9 +11,12 @@ function todayKey() {
 
 function formatRemaining(ms) {
   const totalSeconds = Math.max(0, Math.ceil(ms / 1000));
-  const m = Math.floor(totalSeconds / 60);
+  const h = Math.floor(totalSeconds / 3600);
+  const m = Math.floor(totalSeconds / 60) % 60;
   const s = totalSeconds % 60;
-  return m + ":" + String(s).padStart(2, "0");
+  // Past an hour, read as h:mm:ss rather than a minute count in the hundreds.
+  const minutes = h ? String(m).padStart(2, "0") : String(m);
+  return (h ? h + ":" : "") + minutes + ":" + String(s).padStart(2, "0");
 }
 
 function render({ enabled, offUntil, remainingMs, dayKey }) {

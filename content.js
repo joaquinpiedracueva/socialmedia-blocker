@@ -18,6 +18,19 @@ const shortsSelectors = [
   "tp-yt-paper-tab:has(> .tab-content[title='Shorts'])",
 ];
 
+// Recommendation surfaces on the watch page. The related list is targeted
+// directly instead of the whole #secondary column so playlist panels and
+// live chat stay usable.
+const recommendationSelectors = [
+  // "Up next" / related videos alongside the player.
+  "ytd-watch-next-secondary-results-renderer",
+  // Suggestion grid at the end of a video, the endcards leading into it,
+  // and the tiles overlaid whenever playback is paused.
+  ".ytp-endscreen-content",
+  ".ytp-ce-element",
+  ".ytp-pause-overlay",
+];
+
 function applyBlock() {
   removeBlock();
 
@@ -37,7 +50,7 @@ function applyBlock() {
   const youtubeStyle = document.createElement("style");
   youtubeStyle.id = "site-blocker-style";
 
-  const selectors = [youtubeNavTags, youtubeNavVoiceSearch, youtubeNavSidebarItems, youtubeNavNotificationsButton, youtubeNavCreateButton, youtubeHomeGuideSection, youtubeHomeSuggestions, youtubeVideoOptionsMenu, youtubeVideoNotificationsButton, youtubeVideoSponsorButton, ...shortsSelectors];
+  const selectors = [youtubeNavTags, youtubeNavVoiceSearch, youtubeNavSidebarItems, youtubeNavNotificationsButton, youtubeNavCreateButton, youtubeHomeGuideSection, youtubeHomeSuggestions, youtubeVideoOptionsMenu, youtubeVideoNotificationsButton, youtubeVideoSponsorButton, ...shortsSelectors, ...recommendationSelectors];
 
   youtubeStyle.textContent = selectors.join(", ") + " { display: none !important; }";
 
@@ -53,6 +66,28 @@ function redirectShorts() {
   }
 }
 
+// Autoplay is what turns one video into a session, so switch it off. The
+// player mounts asynchronously after navigation, so retry briefly until the
+// toggle shows up. Note this flips YouTube's own setting: it stays off when
+// the blocker is toggled off.
+let autoplayTimer = null;
+
+function disableAutoplay() {
+  clearTimeout(autoplayTimer);
+  if (!location.pathname.startsWith("/watch")) return;
+
+  let attempts = 0;
+  const tryToggle = () => {
+    const toggle = document.querySelector(".ytp-autonav-toggle-button");
+    if (toggle) {
+      if (toggle.getAttribute("aria-checked") === "true") toggle.click();
+      return;
+    }
+    if (++attempts < 20) autoplayTimer = setTimeout(tryToggle, 500);
+  };
+  tryToggle();
+}
+
 function removeBlock() {
   const style = document.getElementById("site-blocker-style");
   if (style) style.remove();
@@ -66,6 +101,7 @@ new MutationObserver(() => {
     if (enabled) {
       redirectShorts();
       applyBlock();
+      disableAutoplay();
     }
   }
 }).observe(document, { subtree: true, childList: true });
@@ -75,12 +111,18 @@ chrome.storage.local.get("enabled", (data) => {
   if (enabled) {
     redirectShorts();
     applyBlock();
+    disableAutoplay();
   }
 });
 
 chrome.storage.onChanged.addListener((changes) => {
   if (changes.enabled) {
     enabled = changes.enabled.newValue !== false;
-    enabled ? applyBlock() : removeBlock();
+    if (enabled) {
+      applyBlock();
+      disableAutoplay();
+    } else {
+      removeBlock();
+    }
   }
 });

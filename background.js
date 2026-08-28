@@ -1,6 +1,6 @@
-// Enforces a daily off-budget: the blocker can be off for a total of one
-// hour per day. Toggling back on pauses the budget; toggling off resumes
-// it. When the hour is used up, blocking turns back on and the toggle is
+// Enforces a daily off-budget: the blocker can be off for a total of two
+// hours per day. Toggling back on pauses the budget; toggling off resumes
+// it. When the budget is used up, blocking turns back on and the toggle is
 // locked until the next day, when the budget resets.
 //
 // Storage keys:
@@ -9,14 +9,14 @@
 //   remainingMs — while on: budget left today (unset = full budget)
 //   dayKey      — local date the stored budget belongs to
 
-const DAILY_BUDGET_MS = 60 * 60 * 1000;
+const DAILY_BUDGET_MS = 2 * 60 * 60 * 1000;
 const ALARM_NAME = "budget-exhausted";
 
 function todayKey() {
   return new Date().toDateString();
 }
 
-// Remaining budget for today, resetting to the full hour on a new day.
+// Remaining budget for today, resetting to the full two hours on a new day.
 function getRemaining(cb) {
   chrome.storage.local.get(["remainingMs", "dayKey"], ({ remainingMs, dayKey }) => {
     if (dayKey !== todayKey() || remainingMs === undefined) {
