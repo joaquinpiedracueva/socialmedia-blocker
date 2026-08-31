@@ -7,10 +7,7 @@
     "default_popup": "popup/popup.html",
     "default_icon": "image.png"
   },
-  "permissions": ["storage", "alarms"],
-  "background": {
-    "service_worker": "background.js"
-  },
+  "permissions": ["storage"],
   "content_scripts": [
     {
       "matches": ["*://*.youtube.com/*"],

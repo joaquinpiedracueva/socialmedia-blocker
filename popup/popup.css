@@ -49,11 +49,6 @@ body {
   background: var(--color-on);
 }
 
-#toggle:disabled {
-  cursor: not-allowed;
-  opacity: 0.5;
-}
-
 #toggle::before {
   content: "";
   display: block;
